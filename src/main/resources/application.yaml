@@ -1,0 +1,33 @@
+server:
+  port: 8808
+
+logging:
+  level:
+    org:
+      springframework: debug
+      hibernate: debug
+
+spring:
+  application:
+    name: BoardManufacturing;
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  datasource:
+    url: jdbc:postgresql://postgres:5432/postgres
+    username: postgres
+    password: postgres
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      hbm2ddl:
+        auto: create-drop
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+
