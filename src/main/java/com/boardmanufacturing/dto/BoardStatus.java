@@ -1,6 +1,6 @@
-package com.test.boardmanufacturing.entity;
+package com.boardmanufacturing.dto;
 
-public enum WorkflowStep {
+public enum BoardStatus {
     REGISTRATION,
     INSTALLATION,
     QUALITY_CONTROL,

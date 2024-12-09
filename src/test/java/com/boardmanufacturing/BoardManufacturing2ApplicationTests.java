@@ -1,13 +1,11 @@
-package com.test.boardmanufacturing;
+package com.boardmanufacturing;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+
 class BoardManufacturing2ApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+
 
 }

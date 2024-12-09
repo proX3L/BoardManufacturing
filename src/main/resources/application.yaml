@@ -22,7 +22,7 @@ spring:
     properties.hibernate:
       show_sql: true
       hbm2ddl:
-        auto: create-drop
+        auto: create
 
 springdoc:
   swagger-ui:

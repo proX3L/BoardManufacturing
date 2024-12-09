@@ -1,9 +1,9 @@
-package com.test.boardmanufacturing;
+package com.boardmanufacturing;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = "com.test.boardmanufacturing")
+@SpringBootApplication(scanBasePackages = "com.boardmanufacturing")
 public class BoardManufacturing2Application {
 
     public static void main(String[] args) {
