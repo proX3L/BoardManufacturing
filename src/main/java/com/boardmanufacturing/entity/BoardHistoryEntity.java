@@ -8,9 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -18,10 +16,8 @@ import java.time.LocalDateTime;
  * Entity для таблиц board_history
  */
 @Entity
-@Setter
-@Getter
+@Data
 @Table(name = "board_history", schema = "public")
-@RequiredArgsConstructor
 public class BoardHistoryEntity {
 
     @Id

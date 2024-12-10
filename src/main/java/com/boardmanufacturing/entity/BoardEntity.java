@@ -9,10 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Column;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,11 +18,9 @@ import java.util.List;
  * Entity для таблиц board
  */
 @Entity
+@Data
 @Table(name = "board", schema = "public")
-@RequiredArgsConstructor
-@Getter
-@Setter
-@AllArgsConstructor
+
 public class BoardEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

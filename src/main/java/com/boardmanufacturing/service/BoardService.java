@@ -52,13 +52,13 @@ public class BoardService {
     public BoardEntity updateBoardStatus(Long id, BoardStatus newStatus) {
         // Смотрим старый статус
         BoardEntity boardEntity = boardRepository.getReferenceById(id);
-        BoardStatus oldStatus = boardEntity.getBoardStatus();
 
+        BoardStatus oldStatus = boardEntity.getBoardStatus();
         // Если новый статус корректно сменяет старый, то перезаписываем сущьность. В противном случае кидаем ексепшн.
         if (verifyCorrectStatus(oldStatus, newStatus)) {
             boardEntity.setBoardStatus(newStatus);
 
-            // Сохраняем изменения в истории статусов
+            // Создаем запись в истории статусов
             boardHistoryService.saveHistory(boardEntity, newStatus);
 
             return boardRepository.save(boardEntity);

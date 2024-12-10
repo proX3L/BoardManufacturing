@@ -29,8 +29,13 @@ public class BoardHistoryService {
      */
     public void saveHistory(BoardEntity board, BoardStatus boardStatus) {
         if(boardStatus == null) {
-            throw new IllegalArgumentException("Не допустимый статус");
+            throw new NullPointerException("Не допустимый статус");
         }
+
+        if(board == null) {
+            throw new NullPointerException("Не допустимая информация о плате");
+        }
+
         BoardHistoryEntity historyEntity = new BoardHistoryEntity();
         historyEntity.setBoard(board.getId());
         historyEntity.setStatus(boardStatus);

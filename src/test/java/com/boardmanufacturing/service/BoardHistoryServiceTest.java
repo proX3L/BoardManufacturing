@@ -17,8 +17,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
 
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -47,57 +54,48 @@ class BoardHistoryServiceTest {
         historyEntity.setTimestamp(LocalDateTime.now());
     }
 
-    // Positive test for getHistoryById (valid board ID)
     @Test
-    void testGetHistoryById_Success() {
-        // Arrange: mock repository response
+    @DisplayName("Получение истории платы по id, позитивный тест")
+    void GetHistoryByIdPositiveTest() {
         when(repository.findByBoard(boardEntity.getId())).thenReturn(List.of(historyEntity));
 
-        // Act: call the method
         List<BoardHistoryEntity> result = service.getHistoryById(boardEntity.getId());
 
-        // Assert: validate result
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(historyEntity.getStatus(), result.get(0).getStatus());
         verify(repository, times(1)).findByBoard(boardEntity.getId());
     }
 
-    // Negative test for getHistoryById (nonexistent board ID)
     @Test
-    void testGetHistoryById_Failure_BoardNotFound() {
-        // Arrange: mock empty response for nonexistent board
+    @DisplayName("Получение истории платы, негативный тест")
+    void GetHistoryByIdNegativeTest() {
         when(repository.findByBoard(boardEntity.getId())).thenReturn(List.of());
 
-        // Act: call the method
         List<BoardHistoryEntity> result = service.getHistoryById(boardEntity.getId());
 
-        // Assert: validate empty result
         assertNotNull(result);
         assertTrue(result.isEmpty());
         verify(repository, times(1)).findByBoard(boardEntity.getId());
     }
 
-    // Positive test for saveHistory (valid board and status)
     @Test
-    void testSaveHistory_Success() {
-        // Act: call saveHistory method
-        service.saveHistory(boardEntity, BoardStatus.INSTALLATION);
-
-        // Assert: verify save call on repository
+    @DisplayName("Создание записи статуса по boardEntity и указание статуса REGISTRATION, позитивный тест")
+    void SaveHistoryPositiveTest() {
+        service.saveHistory(boardEntity, BoardStatus.REGISTRATION);
         verify(repository, times(1)).save(any(BoardHistoryEntity.class));
     }
 
-    // Negative test for saveHistory (null board)
     @Test
-    void testSaveHistory_Failure_NullBoard() {
+    @DisplayName("Создание записи статуса платы по null, негативный тест")
+    void SaveHistoryNegativeTest_NullBoard() {
         assertThrows(NullPointerException.class, () -> service.saveHistory(null, BoardStatus.PACKAGING));
         verify(repository, never()).save(any(BoardHistoryEntity.class));
     }
 
-    // Negative test for saveHistory (null status)
     @Test
-    void testSaveHistory_Failure_NullStatus() {
+    @DisplayName("Создание записи статуса платы по boardEntity и указание статуса null, негативный тест")
+    void SaveHistoryNegativeTest_NullStatus() {
         assertThrows(NullPointerException.class, () -> service.saveHistory(boardEntity, null));
         verify(repository, never()).save(any(BoardHistoryEntity.class));
     }
