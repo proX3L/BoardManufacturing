@@ -1,4 +1,4 @@
-package com.boardmanufacturing.dto;
+package com.boardmanufacturing.entity;
 
 public enum BoardStatus {
     REGISTRATION,

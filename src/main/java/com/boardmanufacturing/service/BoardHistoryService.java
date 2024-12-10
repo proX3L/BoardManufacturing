@@ -1,37 +1,42 @@
 package com.boardmanufacturing.service;
 
-import com.boardmanufacturing.dto.BoardDto;
-import com.boardmanufacturing.dto.BoardHistoryDto;
-import com.boardmanufacturing.dto.BoardStatus;
+import com.boardmanufacturing.entity.BoardEntity;
+import com.boardmanufacturing.entity.BoardHistoryEntity;
+import com.boardmanufacturing.entity.BoardStatus;
 import com.boardmanufacturing.repository.BoardHistoryRepository;
-import com.boardmanufacturing.repository.BoardRepository;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 @Service
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BoardHistoryService {
-    BoardRepository boardRepository;
     BoardHistoryRepository repository;
 
-    public BoardHistoryService(BoardHistoryRepository repository, BoardRepository boardRepository) {
-        this.repository = repository;
-        this.boardRepository = boardRepository;
-    }
-
-    public List<BoardHistoryDto> getHistoryById(Long boardId) {
+    /**
+     * Получаем все записи статуса платы
+     */
+    public List<BoardHistoryEntity> getHistoryById(Long boardId) {
         return repository.findByBoard(boardId).stream().toList();
     }
 
-    public BoardHistoryDto saveHistory(BoardDto board, BoardStatus boardStatus) {
-        BoardHistoryDto historyDto = new BoardHistoryDto();
-        historyDto.setBoard(board.getId());
-        historyDto.setStatus(boardStatus);
-        historyDto.setTimestamp(LocalDateTime.now());
+    /**
+     * Сохраняем запись статуса платы
+     */
+    public void saveHistory(BoardEntity board, BoardStatus boardStatus) {
+        if(boardStatus == null) {
+            throw new IllegalArgumentException("Не допустимый статус");
+        }
+        BoardHistoryEntity historyEntity = new BoardHistoryEntity();
+        historyEntity.setBoard(board.getId());
+        historyEntity.setStatus(boardStatus);
+        historyEntity.setTimestamp(LocalDateTime.now());
 
-        return repository.save(historyDto);
+        repository.save(historyEntity);
     }
 }
 

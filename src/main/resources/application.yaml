@@ -11,7 +11,7 @@ spring:
   application:
     name: BoardManufacturing;
   mvc:
-    hiddenmethod:
+    hidden method:
       filter:
         enabled: true
   datasource:
@@ -22,7 +22,7 @@ spring:
     properties.hibernate:
       show_sql: true
       hbm2ddl:
-        auto: create
+        auto: create-drop
 
 springdoc:
   swagger-ui:

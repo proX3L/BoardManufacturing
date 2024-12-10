@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(scanBasePackages = "com.boardmanufacturing")
-public class BoardManufacturing2Application {
+public class BoardManufacturingApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(BoardManufacturing2Application.class, args);
+        SpringApplication.run(BoardManufacturingApplication.class, args);
     }
 
 }

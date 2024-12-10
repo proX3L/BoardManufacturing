@@ -1,4 +1,4 @@
-package com.boardmanufacturing.dto;
+package com.boardmanufacturing.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,17 +15,15 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 /**
- * DTO
+ * Entity для таблиц board_history
  */
 @Entity
 @Setter
 @Getter
 @Table(name = "board_history", schema = "public")
 @RequiredArgsConstructor
-public class BoardHistoryDto  { //implements Serializable
+public class BoardHistoryEntity {
 
-    // идея простая - это класс дто, в базе всего два значения; айди платы и статус
-    // историю можно смотреть если собрать из базы все статусы по айди платы
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

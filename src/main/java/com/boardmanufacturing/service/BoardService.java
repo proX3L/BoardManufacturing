@@ -1,68 +1,67 @@
 package com.boardmanufacturing.service;
 
-import com.boardmanufacturing.dto.BoardDto;
-import com.boardmanufacturing.dto.BoardHistoryDto;
-import com.boardmanufacturing.dto.BoardStatus;
+import com.boardmanufacturing.entity.BoardEntity;
+import com.boardmanufacturing.entity.BoardHistoryEntity;
+import com.boardmanufacturing.entity.BoardStatus;
 import com.boardmanufacturing.repository.BoardHistoryRepository;
 import com.boardmanufacturing.repository.BoardRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 
-
 @Service
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class BoardService {
-    private final BoardRepository boardRepository;
-    private final BoardHistoryService boardHistoryService;
-    private static final BoardStatus REGISTRATION = BoardStatus.REGISTRATION;
-    private final BoardHistoryRepository boardHistoryRepository;
+    BoardRepository boardRepository;
+    BoardHistoryService boardHistoryService;
+    BoardHistoryRepository boardHistoryRepository;
 
-    public BoardService(BoardRepository boardRepository, BoardHistoryService boardHistoryService,
-                        BoardHistoryRepository boardHistoryRepository) {
-        this.boardRepository = boardRepository;
-        this.boardHistoryService = boardHistoryService;
-        this.boardHistoryRepository = boardHistoryRepository;
-    }
-
+    static BoardStatus REGISTRATION = BoardStatus.REGISTRATION;
 
     /**
      * Регистриуем плату, присваивая статус REGISTRATION, так же формируем запись в board_history
      */
-    public BoardDto registerNewBoard(String name) {
-        BoardDto boardDto = new BoardDto();
-        boardDto.setName(name);
+    public BoardEntity registerNewBoard(String name) {
+        if(name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Не допустимое имя платы");
+        }
+
+        BoardEntity boardEntity = new BoardEntity();
+        boardEntity.setName(name);
 
         // напрямую не трогаем енам, записываем его копию со значением
-        boardDto.setBoardStatus(REGISTRATION);
-        boardDto = boardRepository.save(boardDto);
+        boardEntity.setBoardStatus(REGISTRATION);
+        boardEntity = boardRepository.save(boardEntity);
 
-        BoardHistoryDto history = new BoardHistoryDto();
+        BoardHistoryEntity history = new BoardHistoryEntity();
         history.setStatus(REGISTRATION);
-        history.setBoard(boardDto.getId());
+        history.setBoard(boardEntity.getId());
         history.setTimestamp(LocalDateTime.now());
 
         boardHistoryRepository.save(history);
 
-        return boardDto;
+        return boardEntity;
     }
 
     /**
      * Обновляем статус платы в таблице board и добавляя запись в board_history
      */
-    public BoardDto updateBoardStatus(Long id, BoardStatus newStatus) {
-        // смотрим старый статус
-        BoardDto boardDto = boardRepository.getReferenceById(id);
-        BoardStatus oldStatus = boardDto.getBoardStatus();
+    public BoardEntity updateBoardStatus(Long id, BoardStatus newStatus) {
+        // Смотрим старый статус
+        BoardEntity boardEntity = boardRepository.getReferenceById(id);
+        BoardStatus oldStatus = boardEntity.getBoardStatus();
 
-        // если новый статус корректно сменяет старый, то перезаписываем дто. Если нет - кидаем ексепшн
+        // Если новый статус корректно сменяет старый, то перезаписываем сущьность. В противном случае кидаем ексепшн.
         if (verifyCorrectStatus(oldStatus, newStatus)) {
-            boardDto.setBoardStatus(newStatus);
+            boardEntity.setBoardStatus(newStatus);
 
-            // сохраняем в историю айди платы и статус
             // Сохраняем изменения в истории статусов
-            boardHistoryService.saveHistory(boardDto, newStatus);
+            boardHistoryService.saveHistory(boardEntity, newStatus);
 
-            return boardRepository.save(boardDto);
+            return boardRepository.save(boardEntity);
         } else {
             throw new IllegalStateException("Недопустимый переход статуса");
         }
