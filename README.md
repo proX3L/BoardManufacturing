@@ -27,4 +27,4 @@ PUT запрос http://localhost:8808/api/boards/update/ID/STATUS , где ID -
 Переход на заключительный шаг "Упаковывание", возможен только с шага "Контроль качества". 
 
 ### Просмотр истории по плате 
-GET запрос http://localhost:8808/api/boards/history/1 , где ID - индекс платы
+GET запрос http://localhost:8808/api/boards/history/ID , где ID - индекс платы
